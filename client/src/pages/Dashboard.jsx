@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskCard from "../components/TaskCard";
 
 const Dashboard = () => {
-    const [tasks, setTasks] = useState([
-        {
-            id: 1,
-            title: "Complete React Module",
-            description: "Finish learning React basics",
-            priority: "High",
-            status: "Pending",
-        },
-    ]);
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem("tasks");
+
+        return savedTasks ? JSON.parse(savedTasks) : [];
+    });
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [priority, setPriority] = useState("Low");
+
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
     const addTask = (e) => {
         e.preventDefault();
