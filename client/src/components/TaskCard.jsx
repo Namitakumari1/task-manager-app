@@ -1,4 +1,5 @@
-const TaskCard = ({  
+const TaskCard = ({
+  task,
   id,
   title,
   description,
@@ -6,6 +7,7 @@ const TaskCard = ({
   status,
   completeTask,
   onDelete,
+  onEdit,
 }) => {
   return (
     <div className="bg-white shadow-md rounded-lg p-4 mb-4">
@@ -30,13 +32,19 @@ const TaskCard = ({
           {status}
         </span>
       </p>
-
       <div className="flex gap-3">
         <button
           onClick={() => completeTask(id)}
           className="bg-green-600 text-white px-4 py-2 rounded"
         >
           Complete
+        </button>
+
+        <button
+          onClick={() => onEdit(task)}
+          className="bg-yellow-500 text-white px-4 py-2 rounded"
+        >
+          Edit
         </button>
 
         <button

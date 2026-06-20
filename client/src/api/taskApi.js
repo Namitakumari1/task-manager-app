@@ -21,3 +21,8 @@ export const completeTask = async (id) => {
   const response = await axios.put(`${API_URL}/${id}`);
   return response.data;
 };
+
+export const updateTask = async (id, taskData) => {
+  const response = await axios.put(`${API_URL}/edit/${id}`, taskData);
+  return response.data;
+};
