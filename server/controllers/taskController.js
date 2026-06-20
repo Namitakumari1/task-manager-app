@@ -54,3 +54,15 @@ export const updateTaskStatus = async (req, res) => {
     });
   }
 };
+
+export const updateTask = async (req, res) => {
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
