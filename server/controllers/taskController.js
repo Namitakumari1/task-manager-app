@@ -43,3 +43,14 @@ export const deleteTask = async (req, res) => {
     });
   }
 };
+
+export const updateTaskStatus = async (req, res) => {
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, { status: "Completed" }, { new: true });
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

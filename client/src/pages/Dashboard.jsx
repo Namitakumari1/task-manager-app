@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TaskCard from "../components/TaskCard";
-import { getTasks, createTask, deleteTask } from "../api/taskApi";
+import { getTasks, createTask, deleteTask, completeTask } from "../api/taskApi";
 
 const Dashboard = () => {
     const [tasks, setTasks] = useState([]);
@@ -52,10 +52,10 @@ const Dashboard = () => {
         setPriority("Low");
     };
 
-    const completeTask = (id) => {
-        const updatedTasks = tasks.map((task) => task.id === id ? { ...task, status: "Completed" } : task);
+    const handleComplete = async (id) => {
+        await completeTask(id);
 
-        setTasks(updatedTasks);
+        await fetchTasks();
     };
 
     const totalTasks = tasks.length;
@@ -132,7 +132,7 @@ const Dashboard = () => {
                     description={task.description}
                     priority={task.priority}
                     status={task.status}
-                    completeTask={completeTask}
+                    completeTask={handleComplete}
                     onDelete={handleDelete}
                 />
             ))}
