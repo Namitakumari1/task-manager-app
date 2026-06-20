@@ -29,3 +29,17 @@ export const getTasks = async (req, res) => {
     });
   }
 };
+
+export const deleteTask = async (req, res) => {
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "Task deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

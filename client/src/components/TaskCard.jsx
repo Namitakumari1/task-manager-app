@@ -1,4 +1,12 @@
-const TaskCard = ({id,title,description,priority,status,deleteTask,completeTask,}) => {
+const TaskCard = ({  
+  id,
+  title,
+  description,
+  priority,
+  status,
+  completeTask,
+  onDelete,
+}) => {
   return (
     <div className="bg-white shadow-md rounded-lg p-4 mb-4">
       <h3 className="text-lg font-semibold">
@@ -32,7 +40,7 @@ const TaskCard = ({id,title,description,priority,status,deleteTask,completeTask,
         </button>
 
         <button
-          onClick={() => deleteTask(id)}
+          onClick={() => onDelete(id)}
           className="bg-red-600 text-white px-4 py-2 rounded"
         >
           Delete

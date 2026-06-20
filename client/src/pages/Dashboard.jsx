@@ -1,22 +1,33 @@
 import { useState, useEffect } from "react";
 import TaskCard from "../components/TaskCard";
+import { getTasks, createTask, deleteTask } from "../api/taskApi";
 
 const Dashboard = () => {
-    const [tasks, setTasks] = useState(() => {
-        const savedTasks = localStorage.getItem("tasks");
-
-        return savedTasks ? JSON.parse(savedTasks) : [];
-    });
+    const [tasks, setTasks] = useState([]);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [priority, setPriority] = useState("Low");
 
-    useEffect(() => {
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-    }, [tasks]);
+    const fetchTasks = async () => {
+        try {
+        const data = await getTasks();
+        setTasks(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-    const addTask = (e) => {
+    const handleDelete = async (id) => {
+        await deleteTask(id);
+        fetchTasks();
+    };
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+
+    const addTask = async (e) => {
         e.preventDefault();
 
         if (!title.trim() || !description.trim()) {
@@ -32,17 +43,13 @@ const Dashboard = () => {
             status: "Pending",
         };
 
-        setTasks([...tasks, newTask]);
+        await createTask(newTask);
+
+        await fetchTasks();
 
         setTitle("");
         setDescription("");
         setPriority("Low");
-    };
-
-    const deleteTask = (id) => {
-        const updatedTasks = tasks.filter((task) => task.id !== id);
-
-        setTasks(updatedTasks);
     };
 
     const completeTask = (id) => {
@@ -119,14 +126,14 @@ const Dashboard = () => {
 
             {tasks.map((task) => (
                 <TaskCard
-                    key={task.id}
-                    id={task.id}
+                    key={task._id}
+                    id={task._id}
                     title={task.title}
                     description={task.description}
                     priority={task.priority}
                     status={task.status}
-                    deleteTask={deleteTask}
                     completeTask={completeTask}
+                    onDelete={handleDelete}
                 />
             ))}
         </div>
