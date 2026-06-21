@@ -1,4 +1,32 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../api/authApi";
+
 const Register = () => {
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      await registerUser({
+        name,
+        email,
+        password,
+      });
+
+      alert("Registration Successful");
+
+      navigate("/login");
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration Failed");
+    }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-[80vh]">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
@@ -6,7 +34,7 @@ const Register = () => {
           Register
         </h1>
 
-        <form className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-4">
           <div>
             <label className="block mb-2 font-medium">
               Name
@@ -15,6 +43,10 @@ const Register = () => {
             <input
               type="text"
               placeholder="Enter name"
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
               className="w-full border p-3 rounded-md"
             />
           </div>
@@ -27,6 +59,10 @@ const Register = () => {
             <input
               type="email"
               placeholder="Enter email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               className="w-full border p-3 rounded-md"
             />
           </div>
@@ -39,6 +75,10 @@ const Register = () => {
             <input
               type="password"
               placeholder="Enter password"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               className="w-full border p-3 rounded-md"
             />
           </div>
