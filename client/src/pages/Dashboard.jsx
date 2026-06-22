@@ -1,8 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import TaskCard from "../components/TaskCard";
-import { getTasks, createTask, deleteTask, completeTask, updateTask, } from "../api/taskApi";
+import {
+    getTasks,
+    createTask,
+    deleteTask,
+    completeTask,
+    updateTask,
+} from "../api/taskApi";
 
 const Dashboard = () => {
+
+    // State management for tasks, filters, search, and task form
     const [tasks, setTasks] = useState([]);
     const [filter, setFilter] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
@@ -12,7 +21,9 @@ const Dashboard = () => {
     const [description, setDescription] = useState("");
     const [priority, setPriority] = useState("Low");
 
+    const navigate = useNavigate();
 
+    // Fetch all tasks from the backend API
     const fetchTasks = async () => {
         try {
             const data = await getTasks();
@@ -22,18 +33,29 @@ const Dashboard = () => {
         }
     };
 
+    // Delete a task and refresh task list
     const handleDelete = async (id) => {
         await deleteTask(id);
         fetchTasks();
     };
 
+    // Check user authentication and load tasks on component mount
     useEffect(() => {
-        fetchTasks();
-    }, []);
+        const token = localStorage.getItem("token");
 
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
+        fetchTasks();
+    }, [navigate]);
+
+    // Create a new task or update an existing task
     const addTask = async (e) => {
         e.preventDefault();
 
+        // Update existing task
         if (editId) {
             await updateTask(editId, {
                 title,
@@ -44,7 +66,6 @@ const Dashboard = () => {
             await fetchTasks();
 
             setEditId(null);
-
             setTitle("");
             setDescription("");
             setPriority("Low");
@@ -52,6 +73,7 @@ const Dashboard = () => {
             return;
         }
 
+        // Validate form fields before creating task
         if (!title.trim() || !description.trim()) {
             alert("Please fill all fields");
             return;
@@ -66,37 +88,47 @@ const Dashboard = () => {
         };
 
         await createTask(newTask);
-
         await fetchTasks();
 
+        // Reset form fields after task creation
         setTitle("");
         setDescription("");
         setPriority("Low");
     };
 
+    // Mark a task as completed
     const handleComplete = async (id) => {
         await completeTask(id);
-
         await fetchTasks();
     };
 
+    // Populate form fields for editing an existing task
     const handleEdit = (task) => {
         setEditId(task._id);
-
         setTitle(task.title);
         setDescription(task.description);
         setPriority(task.priority);
     };
 
+    // Dashboard statistics
     const totalTasks = tasks.length;
 
-    const completedTasks = tasks.filter((task) => task.status === "Completed").length;
+    const completedTasks = tasks.filter(
+        (task) => task.status === "Completed"
+    ).length;
 
-    const pendingTasks = tasks.filter((task) => task.status === "Pending").length;
+    const pendingTasks = tasks.filter(
+        (task) => task.status === "Pending"
+    ).length;
 
+    // Apply status filter and search functionality
     const filteredTasks = tasks.filter((task) => {
-        const matchesFilter = filter === "All" ? true : task.status === filter;
-        const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesFilter =
+            filter === "All" ? true : task.status === filter;
+
+        const matchesSearch =
+            task.title.toLowerCase().includes(searchTerm.toLowerCase());
+
         return matchesFilter && matchesSearch;
     });
 
@@ -106,7 +138,7 @@ const Dashboard = () => {
                 Dashboard
             </h1>
 
-            {/* Filter Buttons */}
+            {/* Task Status Filter Controls */}
 
             <div className="flex gap-3 mb-6">
                 <button
@@ -154,7 +186,7 @@ const Dashboard = () => {
                 />
             </div>
 
-            {/* Task Status */}
+            {/* Task Statistics Summary */}
             <div className="grid md:grid-cols-3 gap-4 mb-8">
                 <div className="bg-blue-500 text-white p-5 rounded-lg">
                     <h2 className="text-xl font-bold">Total Tasks</h2>
@@ -172,7 +204,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Add Task Form */}
+            {/* Create / Update Task Form */}
 
             <form onSubmit={addTask} className="bg-white shadow-md rounded-lg p-6 mb-8">
                 <h2 className="text-2xl font-bold mb-4">
@@ -205,7 +237,7 @@ const Dashboard = () => {
                 </button>
             </form>
 
-            {/* Tasks */}
+            {/* Task List */}
 
             {filteredTasks.map((task) => (
                 <TaskCard
