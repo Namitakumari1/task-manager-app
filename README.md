@@ -1,26 +1,62 @@
 # Smart Task Manager
 
-A full-stack MERN Task Management Application that allows users to create, update, complete, search, filter, and delete tasks.
+A Full Stack MERN Task Management Application that helps users manage daily tasks efficiently. Users can register, login, create tasks, update tasks, mark tasks as completed, search tasks, filter tasks, and delete tasks.
+
+---
+
+## Live Demo
+
+### Frontend (Vercel)
+https://task-manager-app-lime-delta.vercel.app
+
+### Backend (Render)
+https://task-manager-app-hahg.onrender.com
+
+---
 
 ## Features
 
+### Authentication
+- User Registration
+- User Login
+- JWT Authentication
+- Protected Dashboard Route
+- Logout Functionality
+
+### Task Management
 - Create Tasks
 - Edit Tasks
 - Delete Tasks
 - Mark Tasks as Completed
-- Search Tasks
-- Filter Tasks (All / Pending / Completed)
-- Task Priority Management
-- Responsive Dashboard
+- Task Priority Management (Low, Medium, High)
+
+### Search & Filter
+- Search Tasks by Title
+- Filter Tasks:
+  - All
+  - Pending
+  - Completed
+
+### Dashboard
+- Total Tasks Counter
+- Completed Tasks Counter
+- Pending Tasks Counter
+- Responsive UI
+
+### Database
 - MongoDB Atlas Integration
+- Persistent Data Storage
+
+---
 
 ## Tech Stack
 
 ### Frontend
 - React.js
 - Vite
-- Tailwind CSS
+- React Router DOM
 - Axios
+- Tailwind CSS
 
 ### Backend
 - Node.js
@@ -30,6 +66,16 @@ A full-stack MERN Task Management Application that allows users to create, updat
 - MongoDB Atlas
 - Mongoose
 
+### Authentication
+- JWT (JSON Web Token)
+- bcryptjs
+
+### Deployment
+- Vercel (Frontend)
+- Render (Backend)
+
+---
+
 ## Project Structure
 
 ```text
@@ -37,16 +83,25 @@ TASK-MANAGER-APP
 │
 ├── client
 │   ├── src
-│   └── public
+│   │   ├── api
+│   │   ├── components
+│   │   ├── pages
+│   │   └── App.jsx
+│   │
+│   └── package.json
 │
 ├── server
+│   ├── config
 │   ├── controllers
 │   ├── models
 │   ├── routes
-│   └── config
+│   ├── server.js
+│   └── package.json
 │
 └── README.md
 ```
+
+---
 
 ## Installation
 
@@ -70,18 +125,7 @@ cd ../server
 npm install
 ```
 
-### Run Backend
-
-```bash
-npm run dev
-```
-
-### Run Frontend
-
-```bash
-cd ../client
-npm run dev
-```
+---
 
 ## Environment Variables
 
@@ -89,16 +133,100 @@ Create a `.env` file inside the server folder.
 
 ```env
 MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_secret_key
+
 PORT=5000
 ```
 
+---
+
+## Run Backend
+
+```bash
+cd server
+npm start
+```
+
+---
+
+## Run Frontend
+
+```bash
+cd client
+npm run dev
+```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+#### Register User
+
+```http
+POST /api/auth/register
+```
+
+#### Login User
+
+```http
+POST /api/auth/login
+```
+
+### Tasks
+
+#### Get All Tasks
+
+```http
+GET /api/tasks
+```
+
+#### Create Task
+
+```http
+POST /api/tasks
+```
+
+#### Update Task
+
+```http
+PUT /api/tasks/edit/:id
+```
+
+#### Complete Task
+
+```http
+PUT /api/tasks/:id
+```
+
+#### Delete Task
+
+```http
+DELETE /api/tasks/:id
+```
+
+---
+
 ## Future Improvements
 
-- JWT Authentication
-- User Profiles
+- User Specific Tasks
 - Dark Mode
-- Notifications
+- Task Categories
+- Due Dates & Reminders
+- Drag and Drop Task Board
+
+---
 
 ## Author
 
-Namita Kumari
+**Namita Kumari**
+
+Full Stack MERN Developer
+
+---
+
+## License
+
+This project is developed for learning and portfolio purposes.
